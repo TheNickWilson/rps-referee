@@ -1,6 +1,6 @@
 package forms
 
-import models.GameInfo
+import models.{Bot, GameInfo}
 import play.api.data.Form
 import play.api.data.Forms._
 
@@ -9,7 +9,15 @@ object StartGameForm {
     mapping(
       "pointsToWin" -> number,
       "maxRounds" -> number,
-      "dynamiteCount" -> number
+      "dynamiteCount" -> number,
+      "bot1" -> mapping(
+        "name" -> nonEmptyText,
+        "url" -> nonEmptyText
+      )(Bot.apply)(Bot.unapply),
+      "bot2" -> mapping(
+        "name" -> nonEmptyText,
+        "url" -> nonEmptyText
+      )(Bot.apply)(Bot.unapply)
     )(GameInfo.apply)(GameInfo.unapply)
   )
 }
