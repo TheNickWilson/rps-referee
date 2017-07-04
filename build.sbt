@@ -5,10 +5,13 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.11.11"
+
+resolvers += Resolver.bintrayRepo("hmrc", "releases")
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0" % Test
+libraryDependencies += "uk.gov.hmrc" %% "http-verbs" % "6.4.0"
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"
