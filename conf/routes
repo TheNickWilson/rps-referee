@@ -9,5 +9,7 @@ GET     /                           controllers.HomeController.index
 GET     /start-game                 controllers.GameController.startGame
 POST    /start-game                 controllers.GameController.startGamePost
 
+GET     /game-started               controllers.GameController.gameStarted
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

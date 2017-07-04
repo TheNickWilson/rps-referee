@@ -1,5 +1,19 @@
-@()
+@import helper._
+
+@(form: Form[GameInfo])(implicit request: MessagesRequestHeader)
 
 @main("Start a new game") {
     <h1>Start a new game</h1>
+
+    @helper.form(routes.GameController.startGamePost()) {
+        @CSRF.formField
+
+        @helper.inputText(form("maxRounds"))
+
+        @helper.inputText(form("pointsToWin"))
+
+        @helper.inputText(form("dynamiteCount"))
+
+        <input type="submit" value="Start Game" />
+    }
 }
