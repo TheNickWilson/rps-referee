@@ -18,10 +18,12 @@ class GameController @Inject()(cc: MessagesControllerComponents) extends Message
     startGameForm.bindFromRequest().fold(
       formWithErrors => {
         Logger.debug(s"* Bad request to startGamePost with this payload: $formWithErrors")
-        Future.successful(BadRequest(views.html.start_game(formWithErrors)))}, {
-          gameInfo =>
-            Logger.debug(s"Request to startGamePost with this payload: $gameInfo")
-            Future.successful(Redirect(routes.GameController.gameStarted))
+        Future.successful(BadRequest(views.html.start_game(formWithErrors)))
+      }
+      , {
+        gameInfo =>
+          Logger.debug(s"Request to startGamePost with this payload: $gameInfo")
+          Future.successful(Redirect(routes.GameController.gameStarted))
       }
     )
   }
