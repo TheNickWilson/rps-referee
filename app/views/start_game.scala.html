@@ -1,0 +1,27 @@
+@import helper._
+
+@(form: Form[GameInfo])(implicit request: MessagesRequestHeader)
+
+@main("Start a new game") {
+    <h1>Start a new game</h1>
+
+    @helper.form(routes.GameController.startGameSubmit()) {
+        @CSRF.formField
+
+        @helper.inputText(form("maxRounds"))
+
+        @helper.inputText(form("pointsToWin"))
+
+        @helper.inputText(form("dynamiteCount"))
+
+        @helper.inputText(form("bot1.name"))
+
+        @helper.inputText(form("bot1.url"))
+
+        @helper.inputText(form("bot2.name"))
+
+        @helper.inputText(form("bot2.url"))
+
+        <input type="submit" value="Start Game" />
+    }
+}
