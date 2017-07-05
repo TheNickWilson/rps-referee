@@ -27,7 +27,7 @@ class BotSpec extends TestKit(ActorSystem("BotSpec")) with ImplicitSender with W
     }
 
     "send back a FailedToStart message when asked to start but the remote API fails" in {
-      val bot = system.actorOf(Props(new Bot(FailingBotConnector)))
+      val bot = system.actorOf(Props(new Bot(FailingToStartConnector)))
       bot ! Start(botInfo, gameParams)
       expectMsg(FailedToStart)
     }
@@ -47,25 +47,44 @@ class BotSpec extends TestKit(ActorSystem("BotSpec")) with ImplicitSender with W
       bot ! GetMove
       expectMsg(FailedToGetMove)
     }
+
+    "send back a ReportedMove message when asked to tell the bot its opponent's move" in {
+      val bot = system.actorOf(Props(new Bot(WorkingBotConnector)))
+      bot ! Start(botInfo, gameParams)
+      receiveOne(1.seconds)
+      bot ! ReportMove(Rock)
+      expectMsg(ReportedSuccessfully)
+    }
+
+    "send back a FailedToReportMove message when asked to tell the bot its opponent's move but the remote API fails" in {
+      val bot = system.actorOf(Props(new Bot(FailingToReportMoveConnector)))
+      bot ! Start(botInfo, gameParams)
+      receiveOne(1.seconds)
+      bot ! ReportMove(Rock)
+      expectMsg(FailedToReportMove)
+    }
   }
 }
 
-object FailingBotConnector extends FakeBotConnector {
+object FailingToStartConnector extends FakeBotConnector {
   override def start(url: String, gameParameters: GameParameters) = Future(StartFailed)
-  override def getMove(url: String) = Future(StartFailed)
 }
 
-object WorkingBotConnector extends BotConnector {
-  override def start(url: String, gameParameters: GameParameters) = Future(StartSucceeded)
+object WorkingBotConnector extends FakeBotConnector {
   override def getMove(url: String) = Future(GotMove(Rock))
+  override def reportMove(url: String, move: Move) = Future(ReportMoveSucceeded)
 }
 
 object FailingToPlayMoveConnector extends FakeBotConnector {
-  override def start(url: String, gameParameters: GameParameters) = Future(StartSucceeded)
   override def getMove(url: String): Future[ConnectorMessage] = Future(GetMoveFailed)
 }
 
+object FailingToReportMoveConnector extends FakeBotConnector {
+  override def reportMove(url: String, move: Move) = Future(ReportMoveFailed)
+}
+
 trait FakeBotConnector extends BotConnector {
-  override def start(url: String, gameParameters: GameParameters): Future[ConnectorMessage] = ???
+  override def start(url: String, gameParameters: GameParameters): Future[ConnectorMessage] = Future(StartSucceeded)
   override def getMove(url: String): Future[ConnectorMessage] = ???
+  override def reportMove(url: String, move: Move): Future[ConnectorMessage] = ???
 }

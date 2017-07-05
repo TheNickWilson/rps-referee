@@ -26,6 +26,12 @@ class Bot(botConnector: BotConnector) extends Actor {
       referee ! PlayedMove(m)
     case GetMoveFailed =>
       referee ! FailedToGetMove
+    case ReportMove(move) =>
+      botConnector.reportMove(info.url, move) pipeTo self
+    case ReportMoveSucceeded =>
+      referee ! ReportedSuccessfully
+    case ReportMoveFailed =>
+      referee ! FailedToReportMove
   }
 }
 
@@ -36,6 +42,9 @@ case object FailedToStart extends BotMessage
 case object GetMove extends BotMessage
 case object FailedToGetMove extends BotMessage
 case class PlayedMove(move: Move) extends BotMessage
+case class ReportMove(move: Move) extends BotMessage
+case object ReportedSuccessfully extends BotMessage
+case object FailedToReportMove extends BotMessage
 
 sealed trait Move
 case object Rock extends Move
