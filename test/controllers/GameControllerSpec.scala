@@ -2,23 +2,18 @@ package controllers
 
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.http.{DefaultFileMimeTypes, FileMimeTypes, FileMimeTypesConfiguration}
-import play.api.i18n.{Langs, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc._
 import play.api.test.Helpers.GET
-import play.api.test.{FakeRequest, Injecting, NoMaterializer, StubControllerComponentsFactory}
+import play.api.test.{FakeRequest, Injecting}
 import play.api.test.Helpers._
 import play.api.test.CSRFTokenHelper._
-
-import scala.concurrent.ExecutionContext
 
 class GameControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
 
   val validGameInfo = Map(
-    "pointsToWin" -> "1000",
-    "maxRounds" -> "2000",
-    "dynamiteCount" -> "100",
+    "gameParameters.pointsToWin" -> "1000",
+    "gameParameters.maxRounds" -> "2000",
+    "gameParameters.dynamiteCount" -> "100",
     "bot1.name" -> "Bot 1",
     "bot1.url" -> "http://bot1",
     "bot2.name" -> "Bot 2",
@@ -61,7 +56,10 @@ class GameControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
     }
 
     "respond with 400 and an error message to an invalid payload" in {
-      val gameInfo = Map("pointsToWin" -> "1000", "maxRounds" -> "2000", "dynamiteCount" -> "abc")
+      val gameInfo = Map(
+        "gameParameters.pointsToWin" -> "1000",
+        "gameParameters.maxRounds" -> "2000",
+        "gameParameters.dynamiteCount" -> "abc")
       val controller = app.injector.instanceOf[GameController]
       val request = FakeRequest().withJsonBody(Json.toJson(gameInfo)).withCSRFToken
       val result = controller.startGameSubmit().apply(request)

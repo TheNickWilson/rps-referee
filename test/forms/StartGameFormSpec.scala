@@ -2,13 +2,13 @@ package forms
 
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import forms.StartGameForm.startGameForm
-import models.{Bot, GameInfo}
+import models.{BotInfo, GameInfo, GameParameters}
 
 class StartGameFormSpec extends FormSpec with GuiceOneAppPerTest {
   val validGameInfo = Map(
-    "pointsToWin" -> "1000",
-    "maxRounds" -> "2000",
-    "dynamiteCount" -> "100",
+    "gameParameters.pointsToWin" -> "1000",
+    "gameParameters.maxRounds" -> "2000",
+    "gameParameters.dynamiteCount" -> "100",
     "bot1.name" -> "Bot 1",
     "bot1.url" -> "http://bot1",
     "bot2.name" -> "Bot 2",
@@ -17,42 +17,42 @@ class StartGameFormSpec extends FormSpec with GuiceOneAppPerTest {
   "StartGameForm" should {
     "bind correctly when given a valid payload" in {
       val form = startGameForm.bind(validGameInfo)
-      form.get mustBe GameInfo(1000, 2000, 100, Bot("Bot 1", "http://bot1"), Bot("Bot 2", "http://bot2"))
+      form.get mustBe GameInfo(GameParameters(1000, 2000, 100), BotInfo("Bot 1", "http://bot1"), BotInfo("Bot 2", "http://bot2"))
     }
 
     "fail to bind when pointsToWin is omitted" in {
-      val data = validGameInfo - "pointsToWin"
-      val expectedErrors = error("pointsToWin", "error.required")
+      val data = validGameInfo - "gameParameters.pointsToWin"
+      val expectedErrors = error("gameParameters.pointsToWin", "error.required")
       checkForError(startGameForm, data, expectedErrors)
     }
 
     "fail to bind when pointsToWin is non-numeric" in {
-      val data = validGameInfo + ("pointsToWin" -> "not a number")
-      val expectedErrors = error("pointsToWin", "error.number")
+      val data = validGameInfo + ("gameParameters.pointsToWin" -> "not a number")
+      val expectedErrors = error("gameParameters.pointsToWin", "error.number")
       checkForError(startGameForm, data, expectedErrors)
     }
 
     "fail to bind when maxRounds is omitted" in {
-      val data = validGameInfo - "maxRounds"
-      val expectedErrors = error("maxRounds", "error.required")
+      val data = validGameInfo - "gameParameters.maxRounds"
+      val expectedErrors = error("gameParameters.maxRounds", "error.required")
       checkForError(startGameForm, data, expectedErrors)
     }
 
     "fail to bind when maxRounds is non-numeric" in {
-      val data = validGameInfo + ("maxRounds" -> "not a number")
-      val expectedErrors = error("maxRounds", "error.number")
+      val data = validGameInfo + ("gameParameters.maxRounds" -> "not a number")
+      val expectedErrors = error("gameParameters.maxRounds", "error.number")
       checkForError(startGameForm, data, expectedErrors)
     }
 
     "fail to bind when dynamiteCount is omitted" in {
-      val data = validGameInfo - "dynamiteCount"
-      val expectedErrors = error("dynamiteCount", "error.required")
+      val data = validGameInfo - "gameParameters.dynamiteCount"
+      val expectedErrors = error("gameParameters.dynamiteCount", "error.required")
       checkForError(startGameForm, data, expectedErrors)
     }
 
     "fail to bind when dynamiteCount is non-numeric" in {
-      val data = validGameInfo + ("dynamiteCount" -> "not a number")
-      val expectedErrors = error("dynamiteCount", "error.number")
+      val data = validGameInfo + ("gameParameters.dynamiteCount" -> "not a number")
+      val expectedErrors = error("gameParameters.dynamiteCount", "error.number")
       checkForError(startGameForm, data, expectedErrors)
     }
 

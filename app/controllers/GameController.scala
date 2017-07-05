@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject._
 
+import connectors.BotConnector
 import play.api.mvc._
 import forms.StartGameForm.startGameForm
 import play.api.Logger
@@ -9,7 +10,7 @@ import play.api.i18n.I18nSupport
 
 import scala.concurrent.Future
 
-class GameController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
+class GameController @Inject()(cc: ControllerComponents, botConnector: BotConnector) extends AbstractController(cc) with I18nSupport {
 
   def startGame() = Action { implicit request =>
     val messages = request.messages

@@ -1,3 +1,3 @@
 package models
 
-case class GameInfo (pointsToWin: Int, maxRounds: Int, dynamiteCount: Int, bot1: Bot, bot2: Bot)
+case class GameInfo (gameParameters: GameParameters, bot1: BotInfo, bot2: BotInfo)

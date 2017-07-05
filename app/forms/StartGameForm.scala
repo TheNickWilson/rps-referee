@@ -1,23 +1,24 @@
 package forms
 
-import models.{Bot, GameInfo}
+import models.{BotInfo, GameInfo, GameParameters}
 import play.api.data.Form
 import play.api.data.Forms._
 
 object StartGameForm {
   val startGameForm = Form(
     mapping(
-      "pointsToWin" -> number,
-      "maxRounds" -> number,
-      "dynamiteCount" -> number,
+      "gameParameters" -> mapping("pointsToWin" -> number,
+        "maxRounds" -> number,
+        "dynamiteCount" -> number)
+      (GameParameters.apply)(GameParameters.unapply),
       "bot1" -> mapping(
         "name" -> nonEmptyText,
         "url" -> nonEmptyText
-      )(Bot.apply)(Bot.unapply),
+      )(BotInfo.apply)(BotInfo.unapply),
       "bot2" -> mapping(
         "name" -> nonEmptyText,
         "url" -> nonEmptyText
-      )(Bot.apply)(Bot.unapply)
+      )(BotInfo.apply)(BotInfo.unapply)
     )(GameInfo.apply)(GameInfo.unapply)
   )
 }

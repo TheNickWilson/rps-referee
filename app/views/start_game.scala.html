@@ -8,11 +8,11 @@
     @helper.form(routes.GameController.startGameSubmit()) {
         @CSRF.formField
 
-        @helper.inputText(form("maxRounds"))
+        @helper.inputText(form("gameParameters.maxRounds"))
 
-        @helper.inputText(form("pointsToWin"))
+        @helper.inputText(form("gameParameters.pointsToWin"))
 
-        @helper.inputText(form("dynamiteCount"))
+        @helper.inputText(form("gameParameters.dynamiteCount"))
 
         @helper.inputText(form("bot1.name"))
 
