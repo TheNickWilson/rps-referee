@@ -5,7 +5,7 @@
 @main("Start a new game") {
     <h1>Start a new game</h1>
 
-    @helper.form(routes.GameController.startGamePost()) {
+    @helper.form(routes.GameController.startGameSubmit()) {
         @CSRF.formField
 
         @helper.inputText(form("maxRounds"))

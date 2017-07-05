@@ -3,7 +3,6 @@ package controllers
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.libs.json.Json
-import play.api.mvc.AnyContentAsEmpty
 import play.api.test.Helpers.GET
 import play.api.test.{FakeRequest, Injecting}
 import play.api.test.Helpers._
@@ -34,7 +33,7 @@ class GameControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
     "respond with 400 to no payload" in {
       val controller = app.injector.instanceOf[GameController]
       val request = FakeRequest().withCSRFToken
-      val result = controller.startGamePost().apply(request)
+      val result = controller.startGameSubmit().apply(request)
 
       status(result) mustBe BAD_REQUEST
     }
@@ -59,7 +58,7 @@ class GameControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
       val gameInfo = Map("pointsToWin" -> "1000", "maxRounds" -> "2000", "dynamiteCount" -> "abc")
       val controller = app.injector.instanceOf[GameController]
       val request = FakeRequest().withJsonBody(Json.toJson(gameInfo)).withCSRFToken
-      val result = controller.startGamePost().apply(request)
+      val result = controller.startGameSubmit().apply(request)
 
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("text/html")

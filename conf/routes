@@ -7,7 +7,7 @@
 GET     /                           controllers.HomeController.index
 
 GET     /start-game                 controllers.GameController.startGame
-POST    /start-game                 controllers.GameController.startGamePost
+POST    /start-game                 controllers.GameController.startGameSubmit
 
 GET     /game-started               controllers.GameController.gameStarted
 

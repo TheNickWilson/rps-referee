@@ -14,7 +14,7 @@ class GameController @Inject()(cc: MessagesControllerComponents) extends Message
     Ok(views.html.start_game(startGameForm))
   }
 
-  def startGamePost() = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def startGameSubmit() = Action.async { implicit request: MessagesRequest[AnyContent] =>
     startGameForm.bindFromRequest().fold(
       formWithErrors => {
         Logger.debug(s"* Bad request to startGamePost with this payload: $formWithErrors")
