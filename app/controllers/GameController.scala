@@ -5,16 +5,18 @@ import javax.inject._
 import play.api.mvc._
 import forms.StartGameForm.startGameForm
 import play.api.Logger
+import play.api.i18n.I18nSupport
 
 import scala.concurrent.Future
 
-class GameController @Inject()(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+class GameController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
 
-  def startGame() = Action { implicit request: MessagesRequest[AnyContent] =>
+  def startGame() = Action { implicit request =>
+    val messages = request.messages
     Ok(views.html.start_game(startGameForm))
   }
 
-  def startGameSubmit() = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def startGameSubmit() = Action.async { implicit request=>
     startGameForm.bindFromRequest().fold(
       formWithErrors => {
         Logger.debug(s"* Bad request to startGamePost with this payload: $formWithErrors")
@@ -28,7 +30,7 @@ class GameController @Inject()(cc: MessagesControllerComponents) extends Message
     )
   }
 
-  def gameStarted() = Action { implicit request: MessagesRequest[AnyContent] =>
+  def gameStarted() = Action { implicit request =>
     Ok(views.html.game_started())
   }
 }

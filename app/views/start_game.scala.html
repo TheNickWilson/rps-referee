@@ -1,6 +1,6 @@
 @import helper._
 
-@(form: Form[GameInfo])(implicit request: MessagesRequestHeader)
+@(form: Form[GameInfo])(implicit request: Request[_], messages: MessagesProvider)
 
 @main("Start a new game") {
     <h1>Start a new game</h1>

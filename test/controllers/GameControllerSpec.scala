@@ -2,13 +2,27 @@ package controllers
 
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import play.api.http.{DefaultFileMimeTypes, FileMimeTypes, FileMimeTypesConfiguration}
+import play.api.i18n.{Langs, MessagesApi}
 import play.api.libs.json.Json
+import play.api.mvc._
 import play.api.test.Helpers.GET
-import play.api.test.{FakeRequest, Injecting}
+import play.api.test.{FakeRequest, Injecting, NoMaterializer, StubControllerComponentsFactory}
 import play.api.test.Helpers._
 import play.api.test.CSRFTokenHelper._
 
+import scala.concurrent.ExecutionContext
+
 class GameControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
+
+  val validGameInfo = Map(
+    "pointsToWin" -> "1000",
+    "maxRounds" -> "2000",
+    "dynamiteCount" -> "100",
+    "bot1.name" -> "Bot 1",
+    "bot1.url" -> "http://bot1",
+    "bot2.name" -> "Bot 2",
+    "bot2.url" -> "http://bot2")
 
   "GameContoller GET to /start-game" should {
 
@@ -39,15 +53,7 @@ class GameControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
     }
 
     "respond to a valid payload by redirecting to the 'game started' page" in {
-      val gameInfo = Map(
-        "pointsToWin" -> "1000",
-        "maxRounds" -> "2000",
-        "dynamiteCount" -> "100",
-        "bot1.name" -> "Bot 1",
-        "bot1.url" -> "http://bot1",
-        "bot2.name" -> "Bot 2",
-        "bot2.url" -> "http://bot2")
-      val request = FakeRequest(POST, "/start-game").withJsonBody(Json.toJson(gameInfo))
+      val request = FakeRequest(POST, "/start-game").withJsonBody(Json.toJson(validGameInfo))
       val result = route(app, request).get
 
       status(result) mustBe SEE_OTHER
