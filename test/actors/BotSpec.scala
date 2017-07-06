@@ -3,7 +3,7 @@ package actors
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit}
 import connectors._
-import models.{BotInfo, GameInfo, GameParameters}
+import models.{BotInfo, GameParameters}
 import org.scalatest.{BeforeAndAfterAll, WordSpecLike}
 
 import scala.concurrent.Future
