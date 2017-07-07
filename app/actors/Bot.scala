@@ -47,6 +47,7 @@ case object ReportedSuccessfully extends BotMessage
 case object FailedToReportMove extends BotMessage
 
 sealed trait Move
+case object NoMove extends Move
 case object Rock extends Move
 case object Paper extends Move
 case object Scissors extends Move

@@ -47,5 +47,23 @@ class RefereeSpec extends TestKit(ActorSystem("RefereeSpec")) with ImplicitSende
       probe1.expectMsg(GetMove)
       probe2.expectMsg(GetMove)
     }
+
+    // TODO: Remove when we're confident this behaviour is correct, pausing for 30ms sucks!
+    "not report moves when only one bot has played" in {
+      val referee = system.actorOf(Props(new Referee(bot1Maker, bot2Maker, gameInfo)))
+      probe1.send(referee, PlayedMove(Rock))
+
+      probe1.expectNoMsg(30 millis)
+      probe2.expectNoMsg(30 millis)
+    }
+
+    "tell both bots their opponents' moves after both have played" in {
+      val referee = system.actorOf(Props(new Referee(bot1Maker, bot2Maker, gameInfo)))
+      probe1.send(referee, PlayedMove(Rock))
+      probe2.send(referee, PlayedMove(Paper))
+
+      probe1.expectMsg(ReportMove(Paper))
+      probe2.expectMsg(ReportMove(Rock))
+    }
   }
 }
